@@ -18,4 +18,19 @@ defmodule Tex.StoriesFixtures do
 
     story_category
   end
+
+  @doc """
+  Generate a story_author.
+  """
+  def story_author_fixture(attrs \\ %{}) do
+    {:ok, story_author} =
+      attrs
+      |> Enum.into(%{
+        name: "some name",
+        uid: 42
+      })
+      |> Tex.Stories.create_story_author()
+
+    story_author
+  end
 end
