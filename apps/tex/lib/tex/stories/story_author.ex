@@ -5,6 +5,7 @@ defmodule Tex.Stories.StoryAuthor do
   schema "story_authors" do
     field :name, :string
     field :uid, :integer
+    field :oid, :string
 
     timestamps()
   end
@@ -12,7 +13,7 @@ defmodule Tex.Stories.StoryAuthor do
   @doc false
   def changeset(story_author, attrs) do
     story_author
-    |> cast(attrs, [:uid, :name])
-    |> validate_required([:uid, :name])
+    |> cast(attrs, [:uid, :oid, :name])
+    |> validate_required([:uid, :oid, :name])
   end
 end

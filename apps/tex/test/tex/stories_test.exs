@@ -21,11 +21,12 @@ defmodule Tex.StoriesTest do
     end
 
     test "create_story_category/1 with valid data creates a story_category" do
-      valid_attrs = %{name: "some name", uid: 42}
+      valid_attrs = %{name: "some name", uid: 42, oid: "42"}
 
       assert {:ok, %StoryCategory{} = story_category} = Stories.create_story_category(valid_attrs)
       assert story_category.name == "some name"
       assert story_category.uid == 42
+      assert story_category.oid == "42"
     end
 
     test "create_story_category/1 with invalid data returns error changeset" do
@@ -57,11 +58,12 @@ defmodule Tex.StoriesTest do
     end
 
     test "create_story_author/1 with valid data creates a story_author" do
-      valid_attrs = %{name: "some name", uid: 42}
+      valid_attrs = %{name: "some name", uid: 42, oid: "42"}
 
       assert {:ok, %StoryAuthor{} = story_author} = Stories.create_story_author(valid_attrs)
       assert story_author.name == "some name"
       assert story_author.uid == 42
+      assert story_author.oid == "42"
     end
 
     test "create_story_author/1 with invalid data returns error changeset" do

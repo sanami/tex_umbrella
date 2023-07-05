@@ -5,6 +5,7 @@ defmodule Tex.Stories.StoryCategory do
   schema "story_categories" do
     field :name, :string
     field :uid, :integer
+    field :oid, :string
 
     timestamps()
   end
@@ -12,7 +13,7 @@ defmodule Tex.Stories.StoryCategory do
   @doc false
   def changeset(story_category, attrs) do
     story_category
-    |> cast(attrs, [:uid, :name])
-    |> validate_required([:uid, :name])
+    |> cast(attrs, [:uid, :oid, :name])
+    |> validate_required([:uid, :oid, :name])
   end
 end

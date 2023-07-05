@@ -1,27 +1,30 @@
 defmodule Tex.Stories.Loader do
-  alias Tex.Stories.StoryCategory
+  def parse_bsondump(file, obj_fn) do
+    file
+    |> File.stream!([:read], :line)
+    |> Stream.with_index
+    |> Enum.reduce(0, fn {json_str, i}, _acc ->
+      json = Jason.decode!(json_str, keys: :atoms)
 
-  def load_categories(json_file) do
-    json_file
-    |> File.stream!
-    |> Jaxon.Stream.from_enumerable
-    |> Jaxon.Stream.query([:root])
-    |> Stream.each(fn %{"story_category_name" => name, "uid" => uid} = obj ->
-        IO.inspect obj
-        Tex.Stories.create_story_category(%{name: name, uid: uid})
-      end)
-    |> Stream.run
+      json
+      |> Map.put(:oid, json[:_id][:"$oid"])
+      |> Map.delete(:_id)
+      |> obj_fn.(i)
+
+      i + 1
+    end)
   end
 
-  def load_authors(json_file) do
-    json_file
-    |> File.stream!
-    |> Jaxon.Stream.from_enumerable
-    |> Jaxon.Stream.query([:root])
-    |> Stream.each(fn %{"story_author_name" => name, "uid" => uid} ->
-        Tex.Stories.create_story_author(%{name: name, uid: uid})
-      end)
-    |> Stream.run
+  def load_categories(bd_file) do
+    parse_bsondump bd_file, fn obj, _i ->
+      Tex.Stories.create_story_category %{name: obj[:story_category_name], uid: obj[:uid], oid: obj[:oid]}
+    end
+  end
+
+  def load_authors(bd_file) do
+    parse_bsondump bd_file, fn obj, _i ->
+      Tex.Stories.create_story_author %{name: obj[:story_author_name], uid: obj[:uid], oid: obj[:oid]}
+    end
   end
 
   def run do

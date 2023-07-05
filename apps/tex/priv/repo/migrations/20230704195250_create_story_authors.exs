@@ -4,12 +4,14 @@ defmodule Tex.Repo.Migrations.CreateStoryAuthors do
   def change do
     create table(:story_authors) do
       add :uid, :integer
-      add :name, :string
+      add :oid, :string, null: false
+      add :name, :string, null: false
 
       timestamps()
     end
 
     create index(:story_authors, [:uid], unique: true)
+    create index(:story_authors, [:oid], unique: true)
     create index(:story_authors, [:name], unique: true)
   end
 end

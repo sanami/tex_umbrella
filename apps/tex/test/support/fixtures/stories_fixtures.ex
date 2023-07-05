@@ -11,8 +11,9 @@ defmodule Tex.StoriesFixtures do
     {:ok, story_category} =
       attrs
       |> Enum.into(%{
-        name: "some name",
-        uid: 42
+        name: "cat1",
+        uid: 42,
+        oid: "42"
       })
       |> Tex.Stories.create_story_category()
 
@@ -26,8 +27,9 @@ defmodule Tex.StoriesFixtures do
     {:ok, story_author} =
       attrs
       |> Enum.into(%{
-        name: "some name",
-        uid: 42
+        name: "story1",
+        uid: 42,
+        oid: "42"
       })
       |> Tex.Stories.create_story_author()
 

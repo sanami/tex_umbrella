@@ -40,7 +40,6 @@ defmodule Tex.MixProject do
       {:ecto_sql, "~> 3.6"},
       {:postgrex, ">= 0.0.0"},
       {:jason, "~> 1.2"},
-      {:jaxon, "~> 2.0"}
     ]
   end
 
