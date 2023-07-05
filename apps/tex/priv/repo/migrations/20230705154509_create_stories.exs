@@ -4,9 +4,9 @@ defmodule Tex.Repo.Migrations.CreateStories do
   def change do
     create table(:stories) do
       add :uid, :integer
-      add :title, :string
+      add :title, :string, size: 1024
       add :story_date, :date
-      add :story_excerpt, :string
+      add :story_excerpt, :string, size: 1024
       add :story_body, :text
       add :rating, :float
       add :rating_count, :integer

@@ -51,9 +51,9 @@ CREATE TABLE public.schema_migrations (
 CREATE TABLE public.stories (
     id bigint NOT NULL,
     uid integer,
-    title character varying(255),
+    title character varying(1024),
     story_date date,
-    story_excerpt character varying(255),
+    story_excerpt character varying(1024),
     story_body text,
     rating double precision,
     rating_count integer,
