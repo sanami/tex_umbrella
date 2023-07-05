@@ -2,8 +2,7 @@ defmodule Tex.Stories do
   import Ecto.Query, warn: false
 
   alias Tex.Repo
-  alias Tex.Stories.StoryCategory
-  alias Tex.Stories.StoryAuthor
+  alias Tex.Stories.{StoryCategory, StoryAuthor, Story}
 
   def count(module) do
     module |> select([p], count(p.id)) |> Repo.one
@@ -30,6 +29,18 @@ defmodule Tex.Stories do
   def create_story_author(attrs \\ %{}) do
     %StoryAuthor{}
     |> StoryAuthor.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def list_stories do
+    Repo.all(Story)
+  end
+
+  def get_story!(id), do: Repo.get!(Story, id)
+
+  def create_story(attrs \\ %{}) do
+    %Story{}
+    |> Story.changeset(attrs)
     |> Repo.insert()
   end
 end

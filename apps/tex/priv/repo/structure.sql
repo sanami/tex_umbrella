@@ -45,6 +45,44 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: stories; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.stories (
+    id bigint NOT NULL,
+    uid integer,
+    title character varying(255),
+    story_date date,
+    story_excerpt character varying(255),
+    story_body text,
+    rating double precision,
+    rating_count integer,
+    story_author_id bigint,
+    inserted_at timestamp(0) without time zone NOT NULL,
+    updated_at timestamp(0) without time zone NOT NULL
+);
+
+
+--
+-- Name: stories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.stories_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: stories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.stories_id_seq OWNED BY public.stories.id;
+
+
+--
 -- Name: story_authors; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -111,6 +149,13 @@ ALTER SEQUENCE public.story_categories_id_seq OWNED BY public.story_categories.i
 
 
 --
+-- Name: stories id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.stories ALTER COLUMN id SET DEFAULT nextval('public.stories_id_seq'::regclass);
+
+
+--
 -- Name: story_authors id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -133,6 +178,14 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: stories stories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.stories
+    ADD CONSTRAINT stories_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: story_authors story_authors_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -146,6 +199,41 @@ ALTER TABLE ONLY public.story_authors
 
 ALTER TABLE ONLY public.story_categories
     ADD CONSTRAINT story_categories_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: stories_rating_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX stories_rating_index ON public.stories USING btree (rating);
+
+
+--
+-- Name: stories_story_author_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX stories_story_author_id_index ON public.stories USING btree (story_author_id);
+
+
+--
+-- Name: stories_story_date_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX stories_story_date_index ON public.stories USING btree (story_date);
+
+
+--
+-- Name: stories_title_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX stories_title_index ON public.stories USING btree (title);
+
+
+--
+-- Name: stories_uid_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX stories_uid_index ON public.stories USING btree (uid);
 
 
 --
@@ -191,8 +279,17 @@ CREATE UNIQUE INDEX story_categories_uid_index ON public.story_categories USING 
 
 
 --
+-- Name: stories stories_story_author_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.stories
+    ADD CONSTRAINT stories_story_author_id_fkey FOREIGN KEY (story_author_id) REFERENCES public.story_authors(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
 INSERT INTO public."schema_migrations" (version) VALUES (20230704163543);
 INSERT INTO public."schema_migrations" (version) VALUES (20230704195250);
+INSERT INTO public."schema_migrations" (version) VALUES (20230705154509);

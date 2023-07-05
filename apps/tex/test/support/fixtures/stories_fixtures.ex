@@ -35,4 +35,24 @@ defmodule Tex.StoriesFixtures do
 
     story_author
   end
+
+  @doc """
+  Generate a story.
+  """
+  def story_fixture(attrs \\ %{}) do
+    {:ok, story} =
+      attrs
+      |> Enum.into(%{
+        story_date: ~D[2023-07-04],
+        story_excerpt: "some story_excerpt",
+        story_body: "some story_body",
+        rating: 1,
+        rating_count: 2,
+        title: "some title",
+        uid: 42
+      })
+      |> Tex.Stories.create_story()
+
+    story
+  end
 end

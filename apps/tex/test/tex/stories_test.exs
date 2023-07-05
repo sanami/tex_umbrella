@@ -70,4 +70,39 @@ defmodule Tex.StoriesTest do
       assert {:error, %Ecto.Changeset{}} = Stories.create_story_author(@invalid_attrs)
     end
   end
+
+  describe "stories" do
+    alias Tex.Stories.Story
+
+    import Tex.StoriesFixtures
+
+    @invalid_attrs %{story_date: nil, story_excerpt: nil, rating: nil, title: nil, uid: nil}
+
+    test "list_stories/0 returns all stories" do
+      story = story_fixture()
+      assert Stories.list_stories() == [story]
+    end
+
+    test "get_story!/1 returns the story with given id" do
+      story = story_fixture()
+      assert Stories.get_story!(story.id) == story
+    end
+
+    test "create_story/1 with valid data creates a story" do
+      valid_attrs = %{story_date: ~D[2023-07-04], story_excerpt: "some story_excerpt", story_body: "some story_body", rating: 1, rating_count: 2, title: "some title", uid: 42}
+
+      assert {:ok, %Story{} = story} = Stories.create_story(valid_attrs)
+      assert story.story_date == ~D[2023-07-04]
+      assert story.story_excerpt == "some story_excerpt"
+      assert story.story_body == "some story_body"
+      assert story.rating == 1
+      assert story.rating_count == 2
+      assert story.title == "some title"
+      assert story.uid == 42
+    end
+
+    test "create_story/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Stories.create_story(@invalid_attrs)
+    end
+  end
 end
