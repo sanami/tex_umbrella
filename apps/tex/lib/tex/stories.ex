@@ -43,4 +43,12 @@ defmodule Tex.Stories do
     |> Story.changeset(attrs)
     |> Repo.insert()
   end
+
+  def add_story_categories(story, category_ids) do
+    story
+    |> Repo.preload(:story_categories)
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_assoc(:story_categories, category_ids)
+    |> Repo.update!
+  end
 end

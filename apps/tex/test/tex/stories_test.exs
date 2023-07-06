@@ -104,5 +104,22 @@ defmodule Tex.StoriesTest do
     test "create_story/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Stories.create_story(@invalid_attrs)
     end
+
+    test "add_story_categories" do
+      cat1 = story_category_fixture(%{name: "cat1", uid: 1, oid: "1"})
+      cat2 = story_category_fixture(%{name: "cat2", uid: 2, oid: "2"})
+      story1 = story_fixture()
+
+      #res = Stories.add_story_categories(story1, [%{id: cat1.id}, %{id: cat2.id}])
+      res = Stories.add_story_categories(story1, [cat1, cat2])
+      IO.inspect res
+
+      story11 = Stories.get_story!(story1.id) |> Repo.preload(:story_categories)
+      IO.inspect story11
+      IO.inspect Enum.sort(story11.story_categories) == Enum.sort([cat1, cat2])
+
+      cats11 = Repo.all(assoc(story11, :story_categories))
+      IO.inspect Enum.sort(cats11) == Enum.sort([cat1, cat2])
+    end
   end
 end
