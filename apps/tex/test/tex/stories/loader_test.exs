@@ -59,6 +59,7 @@ defmodule Tex.Stories.LoaderTest do
 
     obj1 = Story |> first(:id) |> Repo.one |> Repo.preload([:story_author, :story_categories])
     IO.inspect obj1
+    assert length(obj1.story_categories) == 1
   end
 
   test "find_by_oid" do

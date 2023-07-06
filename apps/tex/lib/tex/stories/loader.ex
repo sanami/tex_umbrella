@@ -35,6 +35,11 @@ defmodule Tex.Stories.Loader do
   end
 
   def load_stories(bd_file) do
+    all_cats_by_oid = Stories.list_story_categories
+    |> Enum.reduce(%{}, fn x, acc ->
+      Map.put(acc, x.oid, x)
+    end)
+
     parse_bsondump bd_file, fn obj, _i ->
       attrs = %{
         story_date: obj[:story_date][:"$date"],
@@ -51,7 +56,10 @@ defmodule Tex.Stories.Loader do
       if status == :ok do
         cat_oids = get_in(obj, [:story_category_ids, Access.all, :"$oid"])
         Logger.debug cat_oids
-        cats = Stories.get_story_categories(cat_oids)
+
+        # cats = Stories.get_story_categories(cat_oids)
+        cats = Enum.map cat_oids, & all_cats_by_oid[&1]
+
         Stories.set_story_categories(story, cats)
       else
         Logger.error(story.errors)
