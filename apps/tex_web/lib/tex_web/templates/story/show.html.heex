@@ -1,0 +1,7 @@
+<h1><%= @story.title %></h1>
+
+<p>
+  <%= raw @story.story_body %>
+</p>
+
+<span><%= link "Back", to: Routes.story_path(@conn, :index) %></span>

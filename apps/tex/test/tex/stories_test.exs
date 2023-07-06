@@ -88,7 +88,7 @@ defmodule Tex.StoriesTest do
 
     test "list_stories/0 returns all stories" do
       story = story_fixture()
-      assert Stories.list_stories() == [story]
+      assert Stories.list_stories(limit: nil) == [story]
     end
 
     test "get_story!/1 returns the story with given id" do

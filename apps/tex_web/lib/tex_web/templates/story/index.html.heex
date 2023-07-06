@@ -1,0 +1,24 @@
+<h1>Stories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Story excerpt</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for story <- @stories do %>
+      <tr>
+        <td><b><%= story.title %></b></td>
+        <td><%= story.story_excerpt %></td>
+
+        <td>
+          <span><%= link "Show", to: Routes.story_path(@conn, :show, story) %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

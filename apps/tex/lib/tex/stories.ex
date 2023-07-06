@@ -36,8 +36,10 @@ defmodule Tex.Stories do
     |> Repo.insert()
   end
 
-  def list_stories do
-    Repo.all(Story)
+  def list_stories(limit: limit) do
+    q = Story
+    q = if limit, do: limit(q, ^limit), else: q
+    Repo.all(q)
   end
 
   def get_story!(id), do: Repo.get!(Story, id)
