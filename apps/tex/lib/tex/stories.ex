@@ -14,6 +14,10 @@ defmodule Tex.Stories do
 
   def get_story_category!(id), do: Repo.get!(StoryCategory, id)
 
+  def get_story_categories(oids) do
+    StoryCategory |> where([t], t.oid in ^oids) |> Repo.all
+  end
+
   def create_story_category(attrs \\ %{}) do
     %StoryCategory{}
     |> StoryCategory.changeset(attrs)
@@ -44,7 +48,7 @@ defmodule Tex.Stories do
     |> Repo.insert()
   end
 
-  def add_story_categories(story, category_ids) do
+  def set_story_categories(story, category_ids) do
     story
     |> Repo.preload(:story_categories)
     |> Ecto.Changeset.change()

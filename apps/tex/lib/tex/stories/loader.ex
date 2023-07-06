@@ -1,6 +1,5 @@
 defmodule Tex.Stories.Loader do
   import Logger
-  import Ecto.Query
 
   alias Tex.{Repo, Stories}
   alias Tex.Stories.{StoryCategory, StoryAuthor}
@@ -48,13 +47,24 @@ defmodule Tex.Stories.Loader do
         story_author_id: find_by_oid(StoryAuthor, obj[:story_author_id][:"$oid"]),
       }
 
-      {status, obj} = Stories.create_story(attrs)
-      if status != :ok, do: Logger.error(obj.errors)
+      {status, story} = Stories.create_story(attrs)
+      if status == :ok do
+        cat_oids = get_in(obj, [:story_category_ids, Access.all, :"$oid"])
+        Logger.debug cat_oids
+        cats = Stories.get_story_categories(cat_oids)
+        Stories.set_story_categories(story, cats)
+      else
+        Logger.error(story.errors)
+      end
     end
   end
 
+  def count(module) do
+    Repo.aggregate(module, :count)
+  end
+
   def find_by_oid(module, oid) do
-    obj = module |> where(oid: ^oid) |> select([:id]) |> limit(1) |> Repo.one
+    obj = Repo.get_by(module, oid: oid)
     obj && obj.id
   end
 

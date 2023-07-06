@@ -33,6 +33,14 @@ defmodule Tex.StoriesTest do
       assert {:error, %Ecto.Changeset{}} = Stories.create_story_category(@invalid_attrs)
     end
 
+    test "get_story_categories" do
+      cat1 = story_category_fixture(%{name: "cat1", uid: 1, oid: "1"})
+      cat2 = story_category_fixture(%{name: "cat2", uid: 2, oid: "2"})
+
+      assert Stories.get_story_categories(["1"]) == [cat1]
+      assert Stories.get_story_categories(["1", "2"]) == [cat1, cat2]
+    end
+
     test "count" do
       assert Stories.count(StoryCategory) == 0
       _story_category = story_category_fixture()
@@ -105,13 +113,13 @@ defmodule Tex.StoriesTest do
       assert {:error, %Ecto.Changeset{}} = Stories.create_story(@invalid_attrs)
     end
 
-    test "add_story_categories" do
+    test "set_story_categories" do
       cat1 = story_category_fixture(%{name: "cat1", uid: 1, oid: "1"})
       cat2 = story_category_fixture(%{name: "cat2", uid: 2, oid: "2"})
       story1 = story_fixture()
 
-      #res = Stories.add_story_categories(story1, [%{id: cat1.id}, %{id: cat2.id}])
-      res = Stories.add_story_categories(story1, [cat1, cat2])
+      #res = Stories.set_story_categories(story1, [%{id: cat1.id}, %{id: cat2.id}])
+      res = Stories.set_story_categories(story1, [cat1, cat2])
       IO.inspect res
 
       story11 = Stories.get_story!(story1.id) |> Repo.preload(:story_categories)

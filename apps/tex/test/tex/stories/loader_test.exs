@@ -51,12 +51,13 @@ defmodule Tex.Stories.LoaderTest do
   end
 
   test "load_stories" do
+    Loader.load_categories(@category1)
     Loader.load_authors(@authors1)
 
     Loader.load_stories(@stories1)
     assert Stories.count(Story) == 3
 
-    obj1 = Story |> first(:id) |> Repo.one |> Repo.preload(:story_author)
+    obj1 = Story |> first(:id) |> Repo.one |> Repo.preload([:story_author, :story_categories])
     IO.inspect obj1
   end
 
