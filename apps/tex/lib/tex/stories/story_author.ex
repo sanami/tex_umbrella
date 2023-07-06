@@ -2,10 +2,14 @@ defmodule Tex.Stories.StoryAuthor do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Tex.Stories
+
   schema "story_authors" do
     field :name, :string
     field :uid, :integer
     field :oid, :string
+
+    has_many :stories, Stories.Story
 
     timestamps()
   end

@@ -64,6 +64,16 @@ CREATE TABLE public.stories (
 
 
 --
+-- Name: stories_categories_join; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.stories_categories_join (
+    story_id bigint,
+    story_category_id bigint
+);
+
+
+--
 -- Name: stories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -202,6 +212,27 @@ ALTER TABLE ONLY public.story_categories
 
 
 --
+-- Name: stories_categories_join_story_category_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX stories_categories_join_story_category_id_index ON public.stories_categories_join USING btree (story_category_id);
+
+
+--
+-- Name: stories_categories_join_story_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX stories_categories_join_story_id_index ON public.stories_categories_join USING btree (story_id);
+
+
+--
+-- Name: stories_categories_join_story_id_story_category_id_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX stories_categories_join_story_id_story_category_id_index ON public.stories_categories_join USING btree (story_id, story_category_id);
+
+
+--
 -- Name: stories_rating_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -279,6 +310,22 @@ CREATE UNIQUE INDEX story_categories_uid_index ON public.story_categories USING 
 
 
 --
+-- Name: stories_categories_join stories_categories_join_story_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.stories_categories_join
+    ADD CONSTRAINT stories_categories_join_story_category_id_fkey FOREIGN KEY (story_category_id) REFERENCES public.story_categories(id) ON DELETE CASCADE;
+
+
+--
+-- Name: stories_categories_join stories_categories_join_story_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.stories_categories_join
+    ADD CONSTRAINT stories_categories_join_story_id_fkey FOREIGN KEY (story_id) REFERENCES public.stories(id) ON DELETE CASCADE;
+
+
+--
 -- Name: stories stories_story_author_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -293,3 +340,4 @@ ALTER TABLE ONLY public.stories
 INSERT INTO public."schema_migrations" (version) VALUES (20230704163543);
 INSERT INTO public."schema_migrations" (version) VALUES (20230704195250);
 INSERT INTO public."schema_migrations" (version) VALUES (20230705154509);
+INSERT INTO public."schema_migrations" (version) VALUES (20230706153525);
