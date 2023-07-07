@@ -1,23 +1,25 @@
-<h1>Stories</h1>
+<h1 class="h-2">Stories</h1>
 
 <table>
   <thead>
     <tr>
+      <th>Author</th>
+      <th>Date</th>
       <th>Title</th>
       <th>Story excerpt</th>
-
-      <th></th>
+      <th>Categories</th>
     </tr>
   </thead>
   <tbody>
     <%= for story <- @stories do %>
       <tr>
-        <td><b><%= story.title %></b></td>
-        <td><%= story.story_excerpt %></td>
-
+        <td><%= story.story_author.name %></td>
+        <td><%= story.story_date %></td>
         <td>
-          <span><%= link "Show", to: Routes.story_path(@conn, :show, story) %></span>
+          <%= link raw("<b>#{story.title}</b>"), to: Routes.story_path(@conn, :show, story) %>
         </td>
+        <td><%= story.story_excerpt %></td>
+        <td><%= story.story_categories |> Enum.map(& &1.name) |> Enum.join(", ") %></td>
       </tr>
     <% end %>
   </tbody>

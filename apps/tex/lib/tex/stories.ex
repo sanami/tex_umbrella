@@ -39,7 +39,8 @@ defmodule Tex.Stories do
   def list_stories(limit: limit) do
     q = Story
     q = if limit, do: limit(q, ^limit), else: q
-    Repo.all(q)
+
+    q |> order_by(desc: :id) |> Repo.all |> Repo.preload([:story_author, :story_categories])
   end
 
   def get_story!(id), do: Repo.get!(Story, id)
