@@ -118,8 +118,8 @@ defmodule Tex.StoriesTest do
       cat2 = story_category_fixture(%{name: "cat2", uid: 2, oid: "2"})
       story1 = story_fixture()
 
-      #res = Stories.set_story_categories(story1, [%{id: cat1.id}, %{id: cat2.id}])
-      res = Stories.set_story_categories(story1, [cat1, cat2])
+      res = Stories.set_story_categories(story1, {:ids, [cat1.id, cat2.id]})
+      #res = Stories.set_story_categories(story1, {:objects, [cat1, cat2]})
       IO.inspect res
 
       story11 = Stories.get_story!(story1.id) |> Repo.preload(:story_categories)

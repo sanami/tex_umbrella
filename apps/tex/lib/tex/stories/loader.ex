@@ -52,17 +52,17 @@ defmodule Tex.Stories.Loader do
         story_author_id: find_by_oid(StoryAuthor, obj[:story_author_id][:"$oid"]),
       }
 
-      {status, story} = Stories.create_story(attrs)
-      if status == :ok do
-        cat_oids = get_in(obj, [:story_category_ids, Access.all, :"$oid"])
-        Logger.debug cat_oids
+      case Stories.create_story(attrs) do
+        {:ok, story} ->
+          cat_oids = get_in(obj, [:story_category_ids, Access.all, :"$oid"])
+          Logger.debug cat_oids
 
-        # cats = Stories.get_story_categories(cat_oids)
-        cats = Enum.map cat_oids, & all_cats_by_oid[&1]
+          # cats = Stories.get_story_categories(cat_oids)
+          cat_ids = Enum.map cat_oids, & all_cats_by_oid[&1].id
 
-        Stories.set_story_categories(story, cats)
-      else
-        Logger.error(story.errors)
+          Stories.set_story_categories(story, {:ids, cat_ids})
+        {:error, cs} ->
+          Logger.error(cs.errors)
       end
     end
   end

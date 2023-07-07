@@ -50,11 +50,16 @@ defmodule Tex.Stories do
     |> Repo.insert()
   end
 
-  def set_story_categories(story, category_ids) do
+  def set_story_categories(story, {:objects, cats}) do
     story
     |> Repo.preload(:story_categories)
     |> Ecto.Changeset.change()
-    |> Ecto.Changeset.put_assoc(:story_categories, category_ids)
+    |> Ecto.Changeset.put_assoc(:story_categories, cats)
     |> Repo.update!
+  end
+
+  def set_story_categories(story, {:ids, cat_ids}) do
+    entries = Enum.map cat_ids, & %{story_id: story.id, story_category_id: &1}
+    Repo.insert_all "stories_categories_join", entries
   end
 end
