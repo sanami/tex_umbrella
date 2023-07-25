@@ -19,15 +19,15 @@ defmodule TexWeb.ConnCase do
 
   using do
     quote do
+      # The default endpoint for testing
+      @endpoint TexWeb.Endpoint
+
+      use TexWeb, :verified_routes
+
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
       import TexWeb.ConnCase
-
-      alias TexWeb.Router.Helpers, as: Routes
-
-      # The default endpoint for testing
-      @endpoint TexWeb.Endpoint
     end
   end
 

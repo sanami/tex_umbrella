@@ -5,7 +5,7 @@ defmodule TexWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
-    plug :put_root_layout, {TexWeb.LayoutView, :root}
+    plug :put_root_layout, html: {TexWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
@@ -17,7 +17,10 @@ defmodule TexWeb.Router do
   scope "/", TexWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    get "/", PageController, :home
+    get "/my_text", PageController, :my_text
+    get "/my_json", PageController, :my_json
+
     resources "/stories", StoryController, only: [:index, :show]
   end
 

@@ -24,7 +24,10 @@ defmodule Tex.Umbrella.MixProject do
   # Dependencies listed here are available only for this project
   # and cannot be accessed from applications inside the apps/ folder.
   defp deps do
-    []
+    [
+      # Required to run "mix format" on ~H/.heex files from the umbrella root
+      {:phoenix_live_view, ">= 0.0.0"}
+    ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

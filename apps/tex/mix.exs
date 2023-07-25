@@ -9,7 +9,7 @@ defmodule Tex.MixProject do
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
-      elixir: "~> 1.12",
+      elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -36,10 +36,10 @@ defmodule Tex.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix_pubsub, "~> 2.0"},
-      {:ecto_sql, "~> 3.6"},
+      {:phoenix_pubsub, "~> 2.1"},
+      {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
-      {:jason, "~> 1.2"},
+      {:jason, "~> 1.2"}
     ]
   end
 

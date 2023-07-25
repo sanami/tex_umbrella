@@ -1,0 +1,26 @@
+<h1>Stories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Author</th>
+      <th>Date</th>
+      <th>Title</th>
+      <th>Story excerpt</th>
+      <th>Categories</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for story <- @stories do %>
+      <tr>
+        <td><%= story.story_author.name %></td>
+        <td><%= story.story_date %></td>
+        <td>
+          <.link href={~p"/stories/#{story.id}"}><b><%= story.title %></b></.link>
+        </td>
+        <td><%= story.story_excerpt %></td>
+        <td><%= story.story_categories |> Enum.map(& &1.name) |> Enum.join(", ") %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

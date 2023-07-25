@@ -7,7 +7,8 @@ defmodule TexWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_tex_web_key",
-    signing_salt: "6qshfngH"
+    signing_salt: "6qshfngH",
+    same_site: "Lax"
   ]
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
@@ -20,7 +21,7 @@ defmodule TexWeb.Endpoint do
     at: "/",
     from: :tex_web,
     gzip: false,
-    only: ~w(assets fonts images favicon.ico robots.txt)
+    only: TexWeb.static_paths()
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

@@ -20,18 +20,33 @@ config :tex_web,
 # Configures the endpoint
 config :tex_web, TexWeb.Endpoint,
   url: [host: "localhost"],
-  render_errors: [view: TexWeb.ErrorView, accepts: ~w(html json), layout: false],
+  render_errors: [
+    formats: [html: TexWeb.ErrorHTML, json: TexWeb.ErrorJSON],
+    layout: false
+  ],
   pubsub_server: Tex.PubSub,
   live_view: [signing_salt: "OW0NdU/E"]
 
 # Configure esbuild (the version is required)
 config :esbuild,
-  version: "0.14.29",
+  version: "0.17.11",
   default: [
     args:
       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
     cd: Path.expand("../apps/tex_web/assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ]
+
+# Configure tailwind (the version is required)
+config :tailwind,
+  version: "3.2.7",
+  default: [
+    args: ~w(
+      --config=tailwind.config.js
+      --input=css/app.css
+      --output=../priv/static/assets/app.css
+    ),
+    cd: Path.expand("../apps/tex_web/assets", __DIR__)
   ]
 
 # Configures Elixir's Logger
@@ -41,15 +56,6 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
-
-config :tailwind, version: "3.3.2", default: [
-  args: ~w(
-    --config=tailwind.config.js
-    --input=css/app.css
-    --output=../priv/static/assets/app.css
-  ),
-  cd: Path.expand("../apps/tex_web/assets", __DIR__)
-]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
