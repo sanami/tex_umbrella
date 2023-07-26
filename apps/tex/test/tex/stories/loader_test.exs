@@ -62,17 +62,14 @@ defmodule Tex.Stories.LoaderTest do
     assert length(obj1.story_categories) == 1
   end
 
-  test "find_by_oid" do
+  test "cache_data" do
     cat1 = story_category_fixture()
+    au1 = story_author_fixture()
 
-    res = Loader.find_by_oid(StoryCategory, cat1.oid)
+    res = {cc1, aa1} = Loader.cache_data
     IO.inspect res
-    assert res == cat1.id
-    assert Loader.find_by_oid(StoryCategory, "err") == nil
-  end
-
-  test "run" do
-    res = Loader.run
-    IO.inspect res
+    
+    assert cc1[cat1.oid] == cat1
+    assert aa1[au1.oid] == au1
   end
 end

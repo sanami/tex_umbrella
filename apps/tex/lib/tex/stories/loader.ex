@@ -1,8 +1,7 @@
 defmodule Tex.Stories.Loader do
-  import Logger
+  require Logger
 
-  alias Tex.{Repo, Stories}
-  alias Tex.Stories.{StoryCategory, StoryAuthor}
+  alias Tex.Stories
 
   def parse_bsondump(file, obj_fn) do
     file
@@ -35,10 +34,7 @@ defmodule Tex.Stories.Loader do
   end
 
   def load_stories(bd_file) do
-    all_cats_by_oid = Stories.list_story_categories
-    |> Enum.reduce(%{}, fn x, acc ->
-      Map.put(acc, x.oid, x)
-    end)
+    {category_by_oid, author_by_oid} = cache_data()
 
     parse_bsondump bd_file, fn obj, _i ->
       attrs = %{
@@ -49,7 +45,7 @@ defmodule Tex.Stories.Loader do
         rating_count: obj[:story_rating][:count],
         title: obj[:story_title],
         uid: obj[:uid],
-        story_author_id: find_by_oid(StoryAuthor, obj[:story_author_id][:"$oid"]),
+        story_author_id: author_by_oid[obj[:story_author_id][:"$oid"]].id,
       }
 
       case Stories.create_story(attrs) do
@@ -58,7 +54,7 @@ defmodule Tex.Stories.Loader do
           Logger.debug cat_oids
 
           # cats = Stories.get_story_categories(cat_oids)
-          cat_ids = Enum.map cat_oids, & all_cats_by_oid[&1].id
+          cat_ids = Enum.map cat_oids, & category_by_oid[&1].id
 
           Stories.set_story_categories(story, {:ids, cat_ids})
         {:error, cs} ->
@@ -67,15 +63,16 @@ defmodule Tex.Stories.Loader do
     end
   end
 
-  def count(module) do
-    Repo.aggregate(module, :count)
-  end
+  def cache_data do
+    all_cats_by_oid =
+      Enum.reduce(Stories.list_story_categories, %{}, fn x, acc ->
+        Map.put(acc, x.oid, x)
+      end)
+    all_authors_by_oid =
+      Enum.reduce(Stories.list_story_authors, %{}, fn x, acc ->
+        Map.put(acc, x.oid, x)
+      end)
 
-  def find_by_oid(module, oid) do
-    obj = Repo.get_by(module, oid: oid)
-    obj && obj.id
-  end
-
-  def run do
+    {all_cats_by_oid, all_authors_by_oid}
   end
 end
