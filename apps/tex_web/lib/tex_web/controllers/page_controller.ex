@@ -2,9 +2,10 @@ defmodule TexWeb.PageController do
   use TexWeb, :controller
 
   def home(conn, _params) do
-    # The home page is often custom made,
-    # so skip the default app layout.
-    render(conn, :home, layout: false)
+    # render(conn, :home, layout: false)
+    conn
+    |> put_flash(:info, "ok")
+    |> redirect(to: ~p"/stories")
   end
 
   def my_text(conn, _params) do

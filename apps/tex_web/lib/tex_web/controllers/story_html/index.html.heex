@@ -1,25 +1,32 @@
-<h1>Stories</h1>
+<ul>
+  <li :for={cat <- [%{id: "", name: "Все"} | @cats]} class="inline ml-1" >
+    <.link href={~p"/stories?cat_id=#{cat.id}"}>
+      <%= cat.name %>
+    </.link>
+  </li>
+</ul>
 
-<table>
-  <thead>
-    <tr>
-      <th>Author</th>
-      <th>Date</th>
-      <th>Title</th>
-      <th>Story excerpt</th>
-      <th>Categories</th>
-    </tr>
-  </thead>
+<table class="mt-10 table-auto">
   <tbody>
     <%= for story <- @stories do %>
       <tr>
-        <td><%= story.story_author.name %></td>
-        <td><%= story.story_date %></td>
-        <td>
-          <.link href={~p"/stories/#{story.id}"}><b><%= story.title %></b></.link>
+        <td class="w-64">
+          <div class="mb-2 pr-8">
+            <.link href={~p"/stories/#{story.id}"}><%= story.title %></.link>
+          </div>
+          <div class="text-sm">
+            <.link href={~p"/stories?author_id=#{story.story_author_id}"}>
+              <%= story.story_author.name %>
+            </.link>
+          </div>
+          <div class="text-sm">
+            <%= story.story_date %>
+          </div>
+          <div class="text-sm mb-10">
+            <%= story.story_categories |> Enum.map(& &1.name) |> Enum.join(", ") %>
+          </div>
         </td>
-        <td><%= story.story_excerpt %></td>
-        <td><%= story.story_categories |> Enum.map(& &1.name) |> Enum.join(", ") %></td>
+        <td class="align-top"><%= story.story_excerpt %></td>
       </tr>
     <% end %>
   </tbody>
