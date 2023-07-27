@@ -6,28 +6,39 @@
   </li>
 </ul>
 
-<table class="mt-10 table-auto">
-  <tbody>
-    <%= for story <- @stories do %>
-      <tr>
-        <td class="w-64">
-          <div class="mb-2 pr-8">
-            <.link href={~p"/stories/#{story.id}"}><%= story.title %></.link>
-          </div>
-          <div class="text-sm">
-            <.link href={~p"/stories?author_id=#{story.story_author_id}"}>
+<section class="text-gray-600 body-font overflow-hidden">
+  <div class="container px-5 py-24 mx-auto">
+    <div class="-my-8 divide-y-2 divide-gray-100">
+
+      <%= for story <- @stories do %>
+        <div class="py-8 flex flex-wrap md:flex-nowrap">
+          <div class="md:w-64 md:mb-0 mb-6 mr-4 flex-shrink-0 flex flex-col">
+            <span class="font-semibold title-font text-gray-700">
+              <%= story.story_categories |> Enum.map(& &1.name) |> Enum.join(", ") %>
+            </span>
+            <.link href={~p"/stories?author_id=#{story.story_author_id}"} class="mt-1 text-gray-500 text-sm">
               <%= story.story_author.name %>
             </.link>
+            <span class="mt-1 text-gray-500 text-sm"><%= story.story_date %></span>
+            <span class="whitespace-nowrap rounded-full bg-purple-100 px-2.5 py-0.5 text-sm text-purple-700 w-min">
+              <%= story.rating %> (<%= story.rating_count %>)
+            </span>
           </div>
-          <div class="text-sm">
-            <%= story.story_date %>
+          <div class="md:flex-grow">
+            <h2 class="text-2xl font-medium text-gray-900 title-font mb-2"><%= story.title %></h2>
+            <p class="leading-relaxed">
+              <%= story.story_excerpt %>
+            </p>
+            <a href={~p"/stories/#{story.id}"} class="text-blue-500 inline-flex items-center mt-4">Читать
+              <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"></path>
+                <path d="M12 5l7 7-7 7"></path>
+              </svg>
+            </a>
           </div>
-          <div class="text-sm mb-10">
-            <%= story.story_categories |> Enum.map(& &1.name) |> Enum.join(", ") %>
-          </div>
-        </td>
-        <td class="align-top"><%= story.story_excerpt %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+</section>

@@ -6,11 +6,9 @@ defmodule TexWeb.StoryHTML do
   attr :story, :map
   def story_details(assigns) do
     ~H"""
-    <div class="text-sm">
       <%= @story.story_date %>
       <%= @story.rating %>
-      <%= @story.rating_count %>
-    </div>
+      (<%= @story.rating_count %>)
     """
   end
 end
