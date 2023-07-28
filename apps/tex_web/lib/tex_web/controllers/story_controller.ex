@@ -14,7 +14,7 @@ defmodule TexWeb.StoryController do
       page.entries
       |> Repo.preload([:story_author, :story_categories])
 
-    render(conn, :index, stories: stories, story_categories: story_categories)
+    render(conn, :index, stories: stories, story_categories: story_categories, page: page)
   end
 
   def show(conn, %{"id" => id}) do
