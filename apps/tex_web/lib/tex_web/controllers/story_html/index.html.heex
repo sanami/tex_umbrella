@@ -1,5 +1,5 @@
 <ul>
-  <li :for={cat <- [%{id: "", name: "Все"} | @cats]} class="inline ml-1" >
+  <li :for={cat <- [%{id: "", name: "Все"} | @story_categories]} class="inline ml-1" >
     <.link href={~p"/stories?cat_id=#{cat.id}"}>
       <%= cat.name %>
     </.link>

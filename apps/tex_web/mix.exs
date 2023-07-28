@@ -36,6 +36,7 @@ defmodule TexWeb.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:tex, in_umbrella: true},
       {:phoenix, "~> 1.7.6"},
       {:phoenix_ecto, "~> 4.4"},
       {:phoenix_html, "~> 3.3"},
@@ -46,9 +47,9 @@ defmodule TexWeb.MixProject do
       {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
-      {:tex, in_umbrella: true},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:scrivener_html, "~> 1.8", github: "dustinfarris/scrivener_html", branch: "patch-1"}
     ]
   end
 

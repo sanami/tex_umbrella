@@ -36,17 +36,23 @@ defmodule Tex.Stories do
     |> Repo.insert()
   end
 
-  def list_stories(limit: limit, author_id: author_id, cat_id: cat_id) do
+  def list_stories(args \\ []) do
+    author_id = Keyword.get(args, :author_id, nil)
+    cat_id = Keyword.get(args, :cat_id, nil)
+    rating = Keyword.get(args, :rating, nil)
+
     q = Story
-    q = if limit, do: limit(q, ^limit), else: q
 
     q = if author_id do
       q = from s in q, join: a in assoc(s, :story_author), where: a.id == ^author_id
-      q |> order_by(:title)
     else
-      q = q |> where([t], t.rating > 4.5)
-      q = q |> where([t], t.rating_count > 10)
-      q |> order_by(desc: :rating)
+      q
+    end
+
+    q = if rating do
+      q = where(q, [t], t.rating > ^rating and t.rating_count > 10)
+    else
+      q
     end
 
     q = if cat_id && cat_id != "" do
@@ -55,7 +61,10 @@ defmodule Tex.Stories do
       q
     end
 
-    q |> Repo.all |> Repo.preload([:story_author, :story_categories])
+    # q |> order_by(:title)
+    # q |> order_by(desc: :rating)
+
+    q
   end
 
   def get_story!(id), do: Repo.get!(Story, id)

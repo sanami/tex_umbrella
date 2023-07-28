@@ -1,13 +1,20 @@
 defmodule TexWeb.StoryController do
   use TexWeb, :controller
 
-  alias Tex.Stories
+  alias Tex.{Repo, Stories}
 
   def index(conn, params) do
-    cats = Stories.list_story_categories
-    stories = Stories.list_stories(limit: 100, author_id: params["author_id"], cat_id: params["cat_id"])
+    story_categories = Stories.list_story_categories
 
-    render(conn, :index, stories: stories, cats: cats)
+    page =
+      Tex.Stories.list_stories(author_id: params["author_id"], cat_id: params["cat_id"])
+      |> Repo.paginate(params)
+
+    stories =
+      page.entries
+      |> Repo.preload([:story_author, :story_categories])
+
+    render(conn, :index, stories: stories, story_categories: story_categories)
   end
 
   def show(conn, %{"id" => id}) do
