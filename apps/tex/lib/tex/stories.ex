@@ -38,7 +38,7 @@ defmodule Tex.Stories do
 
   def list_stories(args \\ []) do
     author_id = Keyword.get(args, :author_id, nil)
-    cat_id = Keyword.get(args, :cat_id, nil)
+    cat_ids = Keyword.get(args, :cat_ids, [])
     rating = Keyword.get(args, :rating, nil)
 
     q = Story
@@ -55,8 +55,10 @@ defmodule Tex.Stories do
       q
     end
 
-    q = if cat_id && cat_id != "" do
-      from s in q, join: c in assoc(s, :story_categories), where: c.id == ^cat_id
+    q = if cat_ids != [] do
+      Enum.reduce cat_ids, q, fn cat_id, q ->
+        from s in q, join: c in assoc(s, :story_categories), where: c.id == ^cat_id
+      end
     else
       q
     end

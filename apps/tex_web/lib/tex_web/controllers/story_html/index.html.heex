@@ -1,5 +1,5 @@
 <%= form_for @conn.params, Routes.story_path(@conn, :index), [method: "get"], fn f -> %>
-  <%= select f, :cat_id, Enum.map(@story_categories, & {&1.name, &1.id}), prompt: "Все" %>
+  <%= multiple_select f, :cat_ids, Enum.map(@story_categories, & {&1.name, &1.id}) %>
   <%= select f, :rating, ["" | Enum.to_list(1..9)] %>
   <%= select f, :page_size, [10, 25, 50, 100] %>
   <%= submit "Фильтр" %>
