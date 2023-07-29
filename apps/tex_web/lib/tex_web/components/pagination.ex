@@ -5,5 +5,6 @@ defmodule TexWeb.Components.Pagination do
 
   attr :page, :map, required: true
   attr :path, :any
+  attr :rest, :global
   def pagination(assigns)
 end

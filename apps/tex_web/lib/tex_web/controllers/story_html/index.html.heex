@@ -1,13 +1,13 @@
-<%= form_for @conn.params, Routes.story_path(@conn, :index), [method: "get"], fn f -> %>
-  <%= multiple_select f, :cat_ids, Enum.map(@story_categories, & {&1.name, &1.id}) %>
-  <%= select f, :rating, ["" | Enum.to_list(1..9)] %>
-  <%= select f, :page_size, [10, 25, 50, 100] %>
-  <%= submit "Фильтр" %>
-<% end %>
-
-<div class="mt-10">
-  <.pagination page={@page} path={& Routes.story_path(@conn, :index, Map.put(@conn.params, "page", &1)) }/>
+<div class="mb-10">
+  <%= form_for @conn.params, Routes.story_path(@conn, :index), [method: "get"], fn f -> %>
+    <%= multiple_select f, :cat_ids, Enum.map(@story_categories, & {&1.name, &1.id}) %>
+    <%= select f, :rating, ["" | Enum.to_list(1..9)] %>
+    <%= select f, :page_size, [10, 25, 50, 100] %>
+    <%= submit "Фильтр" %>
+  <% end %>
 </div>
+
+<.pagination page={@page} path={& Routes.story_path(@conn, :index, Map.put(@conn.params, "page", &1)) }/>
 
 <section class="text-gray-600 body-font overflow-hidden">
   <div class="container px-5 py-10 mx-auto">
@@ -42,3 +42,5 @@
     </div>
   </div>
 </section>
+
+<.pagination page={@page} path={& Routes.story_path(@conn, :index, Map.put(@conn.params, "page", &1)) }/>
