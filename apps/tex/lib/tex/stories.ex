@@ -44,13 +44,13 @@ defmodule Tex.Stories do
     q = Story
 
     q = if author_id do
-      q = from s in q, join: a in assoc(s, :story_author), where: a.id == ^author_id
+      from s in q, join: a in assoc(s, :story_author), where: a.id == ^author_id
     else
       q
     end
 
     q = if rating do
-      q = where(q, [t], t.rating > ^rating and t.rating_count > 10)
+      where(q, [t], t.rating > ^rating and t.rating_count > 10)
     else
       q
     end

@@ -21,7 +21,7 @@ defmodule TexWeb do
 
   def router do
     quote do
-      use Phoenix.Router, helpers: false
+      use Phoenix.Router, helpers: true
 
       # Import common connection and controller functions to use in pipelines
       import Plug.Conn
@@ -84,9 +84,12 @@ defmodule TexWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import TexWeb.CoreComponents
+      import TexWeb.Components.Pagination
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
+
+      alias TexWeb.Router.Helpers, as: Routes
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())
