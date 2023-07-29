@@ -4,10 +4,16 @@ defmodule TexWeb.StoryController do
   alias Tex.{Repo, Stories}
 
   def index(conn, params) do
+    filter_params =
+      params
+      |> Map.take(~w[author_id cat_id rating])
+      |> Map.filter(fn {_key, val} -> val && val != "" end)
+      |> Keyword.new(fn {key, val} -> {String.to_existing_atom(key), val} end)
+
     story_categories = Stories.list_story_categories
 
     page =
-      Tex.Stories.list_stories(author_id: params["author_id"], cat_id: params["cat_id"])
+      Tex.Stories.list_stories(filter_params)
       |> Repo.paginate(params)
 
     stories =

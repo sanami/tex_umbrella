@@ -1,10 +1,9 @@
-<ul>
-  <li :for={cat <- [%{id: "", name: "Все"} | @story_categories]} class="inline ml-1" >
-    <.link href={~p"/stories?cat_id=#{cat.id}"}>
-      <%= cat.name %>
-    </.link>
-  </li>
-</ul>
+<%= form_for @conn.params, Routes.story_path(@conn, :index), [method: "get"], fn f -> %>
+  <%= select f, :cat_id, Enum.map(@story_categories, & {&1.name, &1.id}), prompt: "Все" %>
+  <%= select f, :rating, ["" | Enum.to_list(1..9)] %>
+  <%= select f, :page_size, [10, 25, 50, 100] %>
+  <%= submit "Фильтр" %>
+<% end %>
 
 <div class="mt-10">
   <.pagination page={@page} path={& Routes.story_path(@conn, :index, Map.put(@conn.params, "page", &1)) }/>
