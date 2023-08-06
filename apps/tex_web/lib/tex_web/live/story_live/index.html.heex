@@ -3,6 +3,26 @@
   <%= inspect Map.keys(assigns) %>
 </p>
 
+<ol class="flex justify-center gap-1 text-xs font-medium">
+  <li>
+    <.link patch={~p"/story?page=#{@page.page_number-1}"} class="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900">
+      <span class="sr-only">Prev Page</span>
+      <.icon name="hero-chevron-left-mini"/>
+    </.link>
+  </li>
+
+  <li>
+    <a href="#" class="block h-8 w-8 rounded border border-gray-100 bg-white text-center leading-8 text-gray-900">1</a>
+  </li>
+
+  <li>
+    <.link patch={~p"/story?page=#{@page.page_number+1}"} class="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900">
+      <span class="sr-only">Next Page</span>
+      <.icon name="hero-chevron-right-mini"/>
+    </.link>
+  </li>
+</ol>
+
 <.table id="users" rows={@stories}>
   <:col :let={s} label="id" >
     <div phx-click={JS.patch(~p"/story/#{s.id}")}>
@@ -14,7 +34,7 @@
   </:col>
 </.table>
 
-<.modal :if={@live_action == :show} id="story-modal" show on_cancel={JS.patch(~p"/story")}>
+<.modal :if={@live_action == :show} id="story-modal" show on_cancel={JS.patch(~p"/story?page=#{@page.page_number}")}>
   <%= @story.title %>
   <%= raw @story.story_body %>
 </.modal>
