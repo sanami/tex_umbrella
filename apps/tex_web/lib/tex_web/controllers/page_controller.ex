@@ -5,7 +5,7 @@ defmodule TexWeb.PageController do
     # render(conn, :home, layout: false)
     conn
     |> put_flash(:info, "ok")
-    |> redirect(to: ~p"/stories")
+    |> redirect(to: ~p"/admin/stories")
   end
 
   def my_text(conn, _params) do

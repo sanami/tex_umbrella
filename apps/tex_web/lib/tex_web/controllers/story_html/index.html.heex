@@ -1,6 +1,6 @@
 <div class="mb-10">
   <%= form_for @conn.params, Routes.story_path(@conn, :index), [method: "get"], fn f -> %>
-    <%= multiple_select f, :cat_ids, Enum.map(@story_categories, & {&1.name, &1.id}) %>
+    <%= multiple_select f, :cat_ids, Enum.map(@story_categories, & {&1.name, &1.id}), class: "h-20" %>
     <%= select f, :rating, ["" | Enum.to_list(1..9)] %>
     <%= select f, :page_size, [10, 25, 50, 100] %>
     <%= submit "Фильтр" %>
@@ -19,7 +19,7 @@
             <span class="font-semibold title-font text-gray-700">
               <%= story.story_categories |> Enum.map(& &1.name) |> Enum.join(", ") %>
             </span>
-            <.link href={~p"/stories?author_id=#{story.story_author_id}"} class="mt-1 text-gray-500 text-sm">
+            <.link href={~p"/admin/stories?author_id=#{story.story_author_id}"} class="mt-1 text-gray-500 text-sm">
               <%= story.story_author.name %>
             </.link>
             <.story_details story={story} />
@@ -29,11 +29,9 @@
             <p class="leading-relaxed">
               <%= story.story_excerpt %>
             </p>
-            <a href={~p"/stories/#{story.id}"} class="text-blue-500 inline-flex items-center mt-4">Читать
-              <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14"></path>
-                <path d="M12 5l7 7-7 7"></path>
-              </svg>
+            <a href={~p"/admin/stories/#{story.id}"} class="text-blue-500 inline-flex items-center mt-4">
+              Читать
+              <.icon name="hero-arrow-small-right"/>
             </a>
           </div>
         </div>
