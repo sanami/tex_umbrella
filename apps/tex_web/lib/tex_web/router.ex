@@ -22,6 +22,9 @@ defmodule TexWeb.Router do
     get "/my_json", PageController, :my_json
 
     resources "/admin/stories", StoryController, only: [:index, :show]
+
+    live "/story", StoryLive.Index
+    live "/story/:story_id", StoryLive.Index, :show
   end
 
   # Other scopes may use custom stacks.

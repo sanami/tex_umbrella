@@ -1,0 +1,20 @@
+<p>
+  <b>assigns:</b>
+  <%= inspect Map.keys(assigns) %>
+</p>
+
+<.table id="users" rows={@stories}>
+  <:col :let={s} label="id" >
+    <div phx-click={JS.patch(~p"/story/#{s.id}")}>
+      <%= s.id %>
+    </div>
+  </:col>
+  <:col :let={s} label="title">
+    <.link patch={~p"/story/#{s.id}"}><%= s.title %></.link>
+  </:col>
+</.table>
+
+<.modal :if={@live_action == :show} id="story-modal" show on_cancel={JS.patch(~p"/story")}>
+  <%= @story.title %>
+  <%= raw @story.story_body %>
+</.modal>
