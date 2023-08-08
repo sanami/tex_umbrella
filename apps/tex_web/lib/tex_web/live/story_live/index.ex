@@ -36,14 +36,20 @@ defmodule TexWeb.StoryLive.Index do
   end
 
   defp set_stories(socket, params) do
+    filter_params =
+      params
+      |> Map.take(~w[author_id cat_ids rating page page_size])
+      |> Map.filter(fn {_key, val} -> val && val != "" && val != [] end)
+      |> Keyword.new(fn {key, val} -> {String.to_existing_atom(key), val} end)
+
     page =
-      Stories.list_stories()
-      |> Repo.paginate(params)
+      Stories.list_stories(filter_params)
+      |> Repo.paginate(filter_params)
 
     stories =
       page.entries
       |> Repo.preload([:story_author, :story_categories])
 
-    assign(socket, stories: stories, page: page)
+    assign(socket, stories: stories, page: page, filter_params: filter_params)
   end
 end

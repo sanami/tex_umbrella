@@ -1,24 +1,27 @@
-<p>
-  <b>assigns:</b>
+<p :if={!true}>
+  <b>assigns</b>
   <%= inspect Map.keys(assigns) %>
+  <b>@socket</b>
+  <%= inspect Map.keys(@socket) %>
+  <%= inspect @filter_params %>
 </p>
 
-<ol class="flex justify-center gap-1 text-xs font-medium">
+<ol class="flex justify-center gap-1 text-xs font-medium mb-2">
   <li>
-    <.link patch={~p"/story?page=#{@page.page_number-1}"} class="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900">
+    <.link patch={~p"/story?#{Keyword.put(@filter_params, :page, @page.page_number-1)}"} class="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900">
       <span class="sr-only">Prev Page</span>
       <.icon name="hero-chevron-left-mini"/>
     </.link>
   </li>
 
   <li>
-    <a href="#" class="block h-8 w-8 rounded border border-gray-100 bg-white text-center leading-8 text-gray-900">
-      <%= @page.page_number %>
-    </a>
+    <span class="block h-8 px-4 rounded border border-gray-100 bg-white text-center leading-8 text-gray-900">
+      <%= @page.page_number %> / <%= @page.total_pages %>
+    </span>
   </li>
 
   <li>
-    <.link patch={~p"/story?page=#{@page.page_number+1}"} class="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900">
+    <.link patch={~p"/story?#{Keyword.put(@filter_params, :page, @page.page_number+1)}"} class="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900">
       <span class="sr-only">Next Page</span>
       <.icon name="hero-chevron-right-mini"/>
     </.link>
@@ -46,12 +49,12 @@
   </div>
 <% end) %>
 
-<.modal :if={@live_action == :show} id="story-modal" show on_cancel={JS.patch(~p"/story?page=#{@page.page_number}")}>
+<.modal :if={@live_action == :show} id="story-modal" show on_cancel={JS.patch(~p"/story?#{@filter_params}")}>
   <div class="mb-4">
     <h3 class="text-lg"><%= @story.title %></h3>
     <TexWeb.StoryHTML.story_details story={@story} />
   </div>
-  <div class="overflow-y-scroll pr-2" style="max-height: 75vh;">
-      <%= raw @story.story_body %>
+  <div class="overflow-y-scroll pr-4" style="max-height: 75vh;">
+    <%= raw @story.story_body %>
   </div>
 </.modal>
