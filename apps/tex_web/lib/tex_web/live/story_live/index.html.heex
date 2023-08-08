@@ -35,6 +35,11 @@
 </.table>
 
 <.modal :if={@live_action == :show} id="story-modal" show on_cancel={JS.patch(~p"/story?page=#{@page.page_number}")}>
-  <%= @story.title %>
-  <%= raw @story.story_body %>
+  <div class="mb-4">
+    <h3 class="text-lg"><%= @story.title %></h3>
+    <TexWeb.StoryHTML.story_details story={@story} />
+  </div>
+  <div class="overflow-y-scroll pr-2" style="max-height: 75vh;">
+      <%= raw @story.story_body %>
+  </div>
 </.modal>
