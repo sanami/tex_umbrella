@@ -6,29 +6,8 @@
   <%= inspect @filter_params %>
 </p>
 
-<ol class="flex justify-center gap-1 text-xs font-medium mb-2">
-  <li>
-    <.link patch={~p"/story?#{Keyword.put(@filter_params, :page, @page.page_number-1)}"} class="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900">
-      <span class="sr-only">Prev Page</span>
-      <.icon name="hero-chevron-left-mini"/>
-    </.link>
-  </li>
+<.pagination page={@page} path={& ~p"/story?#{Keyword.put(@filter_params, :page, &1)}" } class="mb-4"/>
 
-  <li>
-    <span class="block h-8 px-4 rounded border border-gray-100 bg-white text-center leading-8 text-gray-900">
-      <%= @page.page_number %> / <%= @page.total_pages %>
-    </span>
-  </li>
-
-  <li>
-    <.link patch={~p"/story?#{Keyword.put(@filter_params, :page, @page.page_number+1)}"} class="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900">
-      <span class="sr-only">Next Page</span>
-      <.icon name="hero-chevron-right-mini"/>
-    </.link>
-  </li>
-</ol>
-
-<%!--= for story <- @stories do --%>
 <%= @stories |> Stream.with_index |> Enum.map(fn {story, i} -> %>
   <div class={"py-4 flex flex-wrap md:flex-nowrap #{ if rem(i, 2) == 0, do: "bg-gray-50" }"}>
     <div class="md:w-64 md:mb-0 mb-6 mr-4 flex-shrink-0 flex flex-col">
@@ -48,6 +27,8 @@
     </div>
   </div>
 <% end) %>
+
+<.pagination page={@page} path={& ~p"/story?#{Keyword.put(@filter_params, :page, &1)}" } class="mb-4"/>
 
 <.modal :if={@live_action == :show} id="story-modal" show on_cancel={JS.patch(~p"/story?#{@filter_params}")}>
   <div class="mb-4">

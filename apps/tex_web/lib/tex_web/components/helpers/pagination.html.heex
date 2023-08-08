@@ -1,0 +1,25 @@
+<div class={"text-center #{@rest[:class]}"}>
+  <div class="inline-flex items-center justify-center gap-3 w-auto">
+    <.link
+      patch={if @page.page_number > 1, do: @path.(@page.page_number - 1)}
+      class="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
+    >
+      <span class="sr-only">Next Page</span>
+      <span class="hero-chevron-left-mini"/>
+    </.link>
+
+    <p class="text-xs text-gray-900">
+      <%= @page.page_number %>
+      <span class="mx-0.25">/</span>
+      <%= @page.total_pages %>
+    </p>
+
+    <.link
+      patch={if @page.page_number < @page.total_pages, do: @path.(@page.page_number + 1)}
+      class="inline-flex h-8 w-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180"
+    >
+      <span class="sr-only">Next Page</span>
+      <span class="hero-chevron-right-mini"/>
+    </.link>
+  </div>
+</div>

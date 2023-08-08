@@ -1,10 +1,10 @@
-defmodule TexWeb.Components.Pagination do
+defmodule TexWeb.Components.Helpers do
   use Phoenix.Component
 
-  embed_templates "pagination/*"
+  embed_templates "helpers/*"
 
   attr :page, :map, required: true
   attr :path, :any
-  attr :rest, :global
+  attr :rest, :global, default: %{}
   def pagination(assigns)
 end
