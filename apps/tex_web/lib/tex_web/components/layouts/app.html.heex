@@ -1,19 +1,30 @@
-<header class="text-gray-600 body-font">
-  <div class="container mx-auto max-w-4xl flex flex-wrap p-5 flex-col md:flex-row items-center">
-    <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-      <.icon name="hero-book-open" class="h-8 w-8"/>
-      <span class="ml-3 text-xl">phx</span>
-    </a>
-    <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
-      <a class="mr-5 hover:text-gray-900" href={~p"/story"}>Рассказы</a>
-    </nav>
-    <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
-      <a class="mr-5 hover:text-gray-900" href={~p"/admin/stories"}>Admin</a>
-    </nav>
-    <a href="javascript:history.back();" class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
-      <.icon name="hero-arrow-small-left"/>
-      Вернуться
-    </a>
+<header class="bg-white">
+  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <div class="md:flex md:items-center md:gap-12">
+        <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+          <.icon name="hero-book-open" class="h-8 w-8"/>
+          <span class="ml-3 text-xl">phx</span>
+        </a>
+      </div>
+
+      <div class="hidden md:block">
+        <nav aria-label="Global">
+          <ul class="flex items-center gap-6 text-sm">
+            <li>
+              <.link class="mr-5 hover:text-gray-900" patch={~p"/story"}>Рассказы</.link>
+            </li>
+
+            <li>
+              <.link class="mr-5 hover:text-gray-900" href={~p"/admin/stories"}>Admin</.link>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-4">
+      </div>
+    </div>
   </div>
 </header>
 
