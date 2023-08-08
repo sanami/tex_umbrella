@@ -39,3 +39,4 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
+window.pp = window.console.log.bind(window.console)

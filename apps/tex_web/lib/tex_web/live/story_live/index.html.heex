@@ -12,7 +12,9 @@
   </li>
 
   <li>
-    <a href="#" class="block h-8 w-8 rounded border border-gray-100 bg-white text-center leading-8 text-gray-900">1</a>
+    <a href="#" class="block h-8 w-8 rounded border border-gray-100 bg-white text-center leading-8 text-gray-900">
+      <%= @page.page_number %>
+    </a>
   </li>
 
   <li>
@@ -23,16 +25,26 @@
   </li>
 </ol>
 
-<.table id="users" rows={@stories}>
-  <:col :let={s} label="id" >
-    <div phx-click={JS.patch(~p"/story/#{s.id}")}>
-      <%= s.id %>
+<%!--= for story <- @stories do --%>
+<%= @stories |> Stream.with_index |> Enum.map(fn {story, i} -> %>
+  <div class={"py-4 flex flex-wrap md:flex-nowrap #{ if rem(i, 2) == 0, do: "bg-gray-50" }"}>
+    <div class="md:w-64 md:mb-0 mb-6 mr-4 flex-shrink-0 flex flex-col">
+      <span class="font-semibold title-font text-gray-700">
+        <%= story.story_categories |> Enum.map(& &1.name) |> Enum.join(", ") %>
+      </span>
+      <.link patch={~p"/story?author_id=#{story.story_author_id}"} class="mt-1 text-gray-500 text-sm">
+        <%= story.story_author.name %>
+      </.link>
+      <TexWeb.StoryHTML.story_details story={story} />
     </div>
-  </:col>
-  <:col :let={s} label="title">
-    <.link patch={~p"/story/#{s.id}"}><%= s.title %></.link>
-  </:col>
-</.table>
+    <div class="md:flex-grow cursor-pointer" phx-click={JS.patch(~p"/story/#{story.id}")}>
+      <h2 class="text-2xl font-medium text-gray-900 title-font mb-2"><%= story.title %></h2>
+      <p class="leading-relaxed">
+        <%= story.story_excerpt %>
+      </p>
+    </div>
+  </div>
+<% end) %>
 
 <.modal :if={@live_action == :show} id="story-modal" show on_cancel={JS.patch(~p"/story?page=#{@page.page_number}")}>
   <div class="mb-4">
