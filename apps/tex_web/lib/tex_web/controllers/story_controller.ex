@@ -8,7 +8,6 @@ defmodule TexWeb.StoryController do
       params
       |> Map.take(~w[author_id cat_ids rating])
       |> Map.filter(fn {_key, val} -> val && val != "" && val != [] end)
-      |> Keyword.new(fn {key, val} -> {String.to_existing_atom(key), val} end)
 
     page =
       Tex.Stories.list_stories(filter_params)

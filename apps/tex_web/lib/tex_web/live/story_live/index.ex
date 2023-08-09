@@ -7,7 +7,10 @@ defmodule TexWeb.StoryLive.Index do
   def mount(params, session, socket) do
     Logger.debug "---mount #{inspect params} #{inspect session} #{socket.id} #{inspect self()}"
 
-    socket = set_stories(socket, params)
+    socket =
+      socket
+      |> set_stories(params)
+      |> assign(story_categories: Stories.list_story_categories)
 
     {:ok, socket}
   end
@@ -17,6 +20,11 @@ defmodule TexWeb.StoryLive.Index do
     Logger.debug "---handle_params #{socket.assigns[:live_action]} #{inspect params} #{uri} #{socket.id} #{inspect self()}"
 
     {:noreply, apply_action(socket, socket.assigns[:live_action], params)}
+  end
+
+  @impl true
+  def handle_event("filter", params, socket) do
+    {:noreply, set_stories(socket, params)}
   end
 
   # Live actions
@@ -40,7 +48,6 @@ defmodule TexWeb.StoryLive.Index do
       params
       |> Map.take(~w[author_id cat_ids rating page page_size])
       |> Map.filter(fn {_key, val} -> val && val != "" && val != [] end)
-      |> Keyword.new(fn {key, val} -> {String.to_existing_atom(key), val} end)
 
     page =
       Stories.list_stories(filter_params)
@@ -50,6 +57,6 @@ defmodule TexWeb.StoryLive.Index do
       page.entries
       |> Repo.preload([:story_author, :story_categories])
 
-    assign(socket, stories: stories, page: page, filter_params: filter_params)
+    assign(socket, stories: stories, page: page, filter_params: filter_params, filter_form: to_form(filter_params))
   end
 end

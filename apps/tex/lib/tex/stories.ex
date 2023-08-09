@@ -36,10 +36,10 @@ defmodule Tex.Stories do
     |> Repo.insert()
   end
 
-  def list_stories(args \\ []) do
-    author_id = Keyword.get(args, :author_id, nil)
-    cat_ids = Keyword.get(args, :cat_ids, [])
-    rating = Keyword.get(args, :rating, nil)
+  def list_stories(args \\ %{}) do
+    author_id = args["author_id"]
+    cat_ids = args["cat_ids"]
+    rating = args["rating"]
 
     q = Story
 
@@ -55,9 +55,14 @@ defmodule Tex.Stories do
       q
     end
 
-    q = if cat_ids != [] do
+    q = if cat_ids && cat_ids != [] do
+      cat_ids = List.flatten [cat_ids]
       Enum.reduce cat_ids, q, fn cat_id, q ->
-        from s in q, join: c in assoc(s, :story_categories), where: c.id == ^cat_id
+        if cat_id && cat_id != "" do
+          from s in q, join: c in assoc(s, :story_categories), where: c.id == ^cat_id
+        else
+          q
+        end
       end
     else
       q

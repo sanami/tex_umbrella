@@ -1,4 +1,4 @@
-<div class={"text-center #{@rest[:class]}"}>
+<div :if={@page.total_entries > 0} class={"text-center #{@rest[:class]}"}>
   <div class="inline-flex items-center justify-center gap-3 w-auto">
     <.link
       patch={if @page.page_number > 1, do: @path.(@page.page_number - 1)}
