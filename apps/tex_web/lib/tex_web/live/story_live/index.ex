@@ -44,6 +44,8 @@ defmodule TexWeb.StoryLive.Index do
   end
 
   defp set_stories(socket, params) do
+    Logger.debug "---set_stories #{inspect params}"
+
     filter_params =
       params
       |> Map.take(~w[author_id cat_ids rating page page_size])
@@ -57,6 +59,8 @@ defmodule TexWeb.StoryLive.Index do
       page.entries
       |> Repo.preload([:story_author, :story_categories])
 
-    assign(socket, stories: stories, page: page, filter_params: filter_params, filter_form: to_form(filter_params))
+    author = if filter_params["author_id"], do: Stories.get_story_author!(filter_params["author_id"])
+
+    assign(socket, author: author, stories: stories, page: page, filter_params: filter_params, filter_form: to_form(filter_params))
   end
 end

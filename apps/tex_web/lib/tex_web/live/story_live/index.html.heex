@@ -8,14 +8,20 @@
   <%= inspect @filter_params %>
 </p>
 
-<.simple_form for={@filter_form} phx-change="filter">
-  <.input field={@filter_form[:author_id]} type="hidden"/>
-  <div class="grid grid-cols-4 gap-4">
+<.simple_form for={@filter_form} phx-change="filter" class="-mt-10">
+  <div class="grid grid-cols-3 gap-4">
+    <.input field={@filter_form[:author_id]} label="Автор" type="select" options={if @author, do: [{@author.name, @author.id}], else: []} prompt="Любой"/>
     <.input field={@filter_form[:cat_ids]} label="Категория" type="select" multiple options={Enum.map(@story_categories, & {&1.name, &1.id})}/>
-    <.input field={@filter_form[:rating]} label="Рейтинг" type="select" options={1..9} prompt="Любой"/>
-    <.input field={@filter_form[:page_size]} label="Страница" type="select" options={[10, 25, 50, 100]}/>
+    <div>
+      <.input field={@filter_form[:rating]} label="Рейтинг" type="select" options={1..9} prompt="Любой"/>
+      <.input field={@filter_form[:page_size]} type="select" options={[10, 25, 50, 100]}/>
+    </div>
   </div>
 </.simple_form>
+
+<div class="float-right clear-both">
+  <.button type="reset" phx-click={JS.navigate(~p"/story")}>Reset</.button>
+</div>
 
 <.pagination page={@page} path={& ~p"/story?#{Map.put(@filter_params, "page", &1)}" } class="my-4"/>
 
