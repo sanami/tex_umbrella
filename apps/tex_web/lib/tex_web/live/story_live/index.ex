@@ -9,7 +9,7 @@ defmodule TexWeb.StoryLive.Index do
 
     socket =
       socket
-      |> set_stories(params)
+      |> set_stories(params, false)
       |> assign(story_categories: Stories.list_story_categories)
 
     {:ok, socket}
@@ -43,7 +43,7 @@ defmodule TexWeb.StoryLive.Index do
     |> assign(:story, nil)
   end
 
-  defp set_stories(socket, params) do
+  defp set_stories(socket, params, stream \\ true) do
     Logger.debug "---set_stories #{inspect params}"
 
     filter_params =
@@ -55,12 +55,18 @@ defmodule TexWeb.StoryLive.Index do
       Stories.list_stories(filter_params)
       |> Repo.paginate(filter_params)
 
-    stories =
-      page.entries
-      |> Repo.preload([:story_author, :story_categories])
-
     author = if filter_params["author_id"], do: Stories.get_story_author!(filter_params["author_id"])
 
-    assign(socket, author: author, stories: stories, page: page, filter_params: filter_params, filter_form: to_form(filter_params))
+    stories =
+      if stream do
+        page.entries
+        |> Repo.preload([:story_author, :story_categories])
+      else
+        []
+      end
+
+    socket
+    |> stream(:stories, stories, reset: true)
+    |> assign(author: author, page: page, filter_params: filter_params, filter_form: to_form(filter_params))
   end
 end

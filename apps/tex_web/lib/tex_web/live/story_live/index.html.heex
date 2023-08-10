@@ -6,6 +6,7 @@
   <b>@socket</b>
   <%= inspect Map.keys(@socket) %>
   <%= inspect @filter_params %>
+  <%= inspect length(@streams.stories.inserts) %>
 </p>
 
 <.simple_form for={@filter_form} phx-change="filter" class="-mt-10">
@@ -25,25 +26,27 @@
 
 <.pagination page={@page} path={& ~p"/story?#{Map.put(@filter_params, "page", &1)}" } class="my-4"/>
 
-<%= @stories |> Stream.with_index |> Enum.map(fn {story, i} -> %>
-  <div class={"py-4 flex flex-wrap md:flex-nowrap #{ if rem(i, 2) == 0, do: "bg-gray-50" }"}>
-    <div class="md:w-64 md:mb-0 mb-6 mr-4 flex-shrink-0 flex flex-col">
-      <span class="font-semibold title-font text-gray-700">
-        <%= story.story_categories |> Enum.map(& &1.name) |> Enum.join(", ") %>
-      </span>
-      <.link patch={~p"/story?author_id=#{story.story_author_id}"} class="mt-1 text-gray-500 text-sm">
-        <%= story.story_author.name %>
-      </.link>
-      <.story_details story={story} />
+<div id="stories" phx-update="stream">
+  <%= for {dom_id, story} <- @streams.stories do %>
+    <div id={dom_id} class="py-4 flex flex-wrap md:flex-nowrap">
+      <div class="md:w-64 md:mb-0 mb-6 mr-4 flex-shrink-0 flex flex-col">
+        <span class="font-semibold title-font text-gray-700">
+          <%= story.story_categories |> Enum.map(& &1.name) |> Enum.join(", ") %>
+        </span>
+        <.link patch={~p"/story?author_id=#{story.story_author_id}"} class="mt-1 text-gray-500 text-sm">
+          <%= story.story_author.name %>
+        </.link>
+        <.story_details story={story} />
+      </div>
+      <div class="md:flex-grow cursor-pointer" phx-click={JS.patch(~p"/story/#{story.id}")}>
+        <h2 class="text-2xl font-medium text-gray-900 title-font mb-2"><%= story.title %></h2>
+        <p class="leading-relaxed">
+          <%= story.story_excerpt %>
+        </p>
+      </div>
     </div>
-    <div class="md:flex-grow cursor-pointer" phx-click={JS.patch(~p"/story/#{story.id}")}>
-      <h2 class="text-2xl font-medium text-gray-900 title-font mb-2"><%= story.title %></h2>
-      <p class="leading-relaxed">
-        <%= story.story_excerpt %>
-      </p>
-    </div>
-  </div>
-<% end) %>
+  <% end %>
+</div>
 
 <.pagination page={@page} path={& ~p"/story?#{Map.put(@filter_params, "page", &1)}" } class="mb-4"/>
 
