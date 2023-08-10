@@ -18,10 +18,6 @@ defmodule TexWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
-    get "/my_text", PageController, :my_text
-    get "/my_json", PageController, :my_json
-
-    resources "/admin/stories", StoryController, only: [:index, :show]
 
     live "/story", StoryLive.Index
     live "/story/:story_id", StoryLive.Index, :show

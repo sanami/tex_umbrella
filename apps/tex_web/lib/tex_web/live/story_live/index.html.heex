@@ -34,7 +34,7 @@
       <.link patch={~p"/story?author_id=#{story.story_author_id}"} class="mt-1 text-gray-500 text-sm">
         <%= story.story_author.name %>
       </.link>
-      <TexWeb.StoryHTML.story_details story={story} />
+      <.story_details story={story} />
     </div>
     <div class="md:flex-grow cursor-pointer" phx-click={JS.patch(~p"/story/#{story.id}")}>
       <h2 class="text-2xl font-medium text-gray-900 title-font mb-2"><%= story.title %></h2>
@@ -50,7 +50,7 @@
 <.modal :if={@live_action == :show} id="story-modal" show on_cancel={JS.patch(~p"/story?#{@filter_params}")}>
   <div class="mb-4">
     <h3 class="text-lg"><%= @story.title %></h3>
-    <TexWeb.StoryHTML.story_details story={@story} />
+    <.story_details story={@story} />
   </div>
   <div class="overflow-y-scroll pr-4" style="max-height: 75vh;">
     <%= raw @story.story_body %>
