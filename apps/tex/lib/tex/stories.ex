@@ -38,6 +38,7 @@ defmodule Tex.Stories do
   end
 
   def list_stories(args \\ %{}, is_favorites \\ false) do
+    query = args["query"]
     author_id = args["author_id"]
     cat_ids = args["cat_ids"]
     rating = args["rating"]
@@ -81,6 +82,14 @@ defmodule Tex.Stories do
       order_by(q, desc: :favorited_at)
     else
       order_by(q, {^sort_dir, ^sort})
+    end
+
+    q = if query && String.length(query) > 2 do
+      query = String.split(query) |> Enum.join("%")
+      query =  "%#{query}%"
+      from s in q, where: fragment("title ILIKE ?", ^query) # or fragment("story_body ILIKE ?", ^query)
+    else
+      q
     end
 
     q

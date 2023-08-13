@@ -18,8 +18,11 @@
     <.input field={@filter_form[:cat_ids]} label="Категория" type="select" multiple options={Enum.map(@story_categories, & {&1.name, &1.id})} style="height: 108px"/>
     <div>
       <.input field={@filter_form[:page_size]} type="select" options={[10, 25, 50, 100]}/>
-      <.input field={@filter_form[:sort]} type="select" options={%{"Дата" => "story_date", "Рейтинг" => "rating", "Рейтинг кол-во" => "rating_count", "Название" => "title" }}/>
-      <.input field={@filter_form[:sort_dir]} type="select" options={%{"ASC" => "asc_nulls_last", "DESC" => "desc_nulls_last" }}/>
+      <div class="grid grid-cols-2 gap-4">
+        <.input field={@filter_form[:sort]} type="select" options={%{"Дата" => "story_date", "Рейтинг" => "rating", "Рейтинг кол-во" => "rating_count", "Название" => "title" }}/>
+        <.input field={@filter_form[:sort_dir]} type="select" options={%{"ASC" => "asc_nulls_last", "DESC" => "desc_nulls_last" }}/>
+      </div>
+      <.input field={@filter_form[:query]} phx-debounce="300" type="text"/>
     </div>
   </div>
 </.simple_form>

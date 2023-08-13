@@ -65,7 +65,7 @@ defmodule TexWeb.StoryLive.Index do
     is_favorites = socket.assigns[:is_favorites]
     filter_params =
       params
-      |> Map.take(~w[author_id cat_ids rating page page_size sort sort_dir])
+      |> Map.take(~w[query author_id cat_ids rating page page_size sort sort_dir])
       |> Map.filter(fn {_key, val} -> val && val != "" && val != [] end)
 
     page =
