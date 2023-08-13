@@ -1,11 +1,11 @@
 let paginate_el = null
 
 const navigate = function(ev) {
-  pp("PageNav.navigate")
+  //pp("PageNav.navigate")
 
   if (ev.isTrusted) {
     const pos = paginate_el.getBoundingClientRect()
-    pp("PageNav.click", ev.x)
+    //pp("PageNav.click", ev.x)
 
     if (ev.x < pos.left) {
       document.querySelector(".page-prev").click()

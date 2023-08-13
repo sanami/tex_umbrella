@@ -31,7 +31,7 @@
     <div id={dom_id} class="py-4 flex flex-wrap md:flex-nowrap even:bg-gray-100">
       <div class="md:w-64 md:mb-0 mb-6 mr-4 flex-shrink-0 flex flex-col">
         <span class="font-semibold title-font text-gray-700">
-          <%= story.story_categories |> Enum.map(& &1.name) |> Enum.join(", ") %>
+          <%= story.story_categories |> Enum.map(& &1.name) |> Enum.sort |> Enum.join(", ") %>
         </span>
         <.link patch={~p"/story?author_id=#{story.story_author_id}"} class="mt-1 text-gray-500 text-sm">
           <%= story.story_author.name %>
@@ -39,7 +39,10 @@
         <.story_details story={story} />
       </div>
       <div class="md:flex-grow cursor-pointer" phx-click={JS.patch(~p"/story/#{story.id}")}>
-        <h2 class="text-2xl font-medium text-gray-900 title-font mb-2"><%= story.title %></h2>
+        <h2 class="text-2xl font-medium text-gray-900 title-font mb-2" phx-click="set_favorite" phx-value-id={story.id}>
+          <%= story.title %>
+          <.icon name={if favorite?(story), do: "hero-star-solid", else: "hero-star"}/>
+        </h2>
         <p class="leading-relaxed">
           <%= story.story_excerpt %>
         </p>

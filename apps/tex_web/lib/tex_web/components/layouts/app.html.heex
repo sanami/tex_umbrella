@@ -12,7 +12,10 @@
         <nav aria-label="Global">
           <ul class="flex items-center gap-6 text-sm">
             <li>
-              <.link class="mr-5 hover:text-gray-900" patch={~p"/story"}>Рассказы</.link>
+              <.link class={"mr-5 hover:text-gray-900 #{ if assigns[:live_action] == :index, do: "font-bold" }"} patch={~p"/story"}>Рассказы</.link>
+            </li>
+            <li>
+              <.link class={"mr-5 hover:text-gray-900 #{ if assigns[:live_action] == :favorites, do: "font-bold" }"} patch={~p"/story/favorites"}>Избранное</.link>
             </li>
           </ul>
         </nav>

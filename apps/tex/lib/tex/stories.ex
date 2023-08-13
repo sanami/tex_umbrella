@@ -1,5 +1,6 @@
 defmodule Tex.Stories do
   import Ecto.Query, warn: false
+  require Logger
 
   alias Tex.Repo
   alias Tex.Stories.{StoryCategory, StoryAuthor, Story}
@@ -36,12 +37,18 @@ defmodule Tex.Stories do
     |> Repo.insert()
   end
 
-  def list_stories(args \\ %{}) do
+  def list_stories(args \\ %{}, is_favorites \\ false) do
     author_id = args["author_id"]
     cat_ids = args["cat_ids"]
     rating = args["rating"]
 
     q = Story
+
+    q = if is_favorites do
+      from s in q, where: not is_nil(s.favorited_at)
+    else
+      q
+    end
 
     q = if author_id do
       from s in q, join: a in assoc(s, :story_author), where: a.id == ^author_id
@@ -68,8 +75,11 @@ defmodule Tex.Stories do
       q
     end
 
-    # q |> order_by(:title)
-    # q |> order_by(desc: :rating)
+    q = if is_favorites do
+      order_by(q, desc: :favorited_at)
+    else
+      order_by(q, :id)
+    end
 
     q
   end
@@ -80,6 +90,16 @@ defmodule Tex.Stories do
     %Story{}
     |> Story.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def set_favorite(id) do
+    story = Repo.get!(Story, id)
+    favorited_at = if story.favorited_at, do: nil, else: DateTime.now!("Etc/UTC")
+    # Logger.debug "favorited_at = #{favorited_at}"
+
+    story
+    |> Story.changeset(%{favorited_at: favorited_at})
+    |> Repo.update!
   end
 
   def set_story_categories(story, {:objects, cats}) do

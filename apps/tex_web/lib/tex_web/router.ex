@@ -19,7 +19,8 @@ defmodule TexWeb.Router do
 
     get "/", PageController, :home
 
-    live "/story", StoryLive.Index
+    live "/story", StoryLive.Index, :index
+    live "/story/favorites", StoryLive.Index, :favorites
     live "/story/:story_id", StoryLive.Index, :show
   end
 
