@@ -41,6 +41,8 @@ defmodule Tex.Stories do
     author_id = args["author_id"]
     cat_ids = args["cat_ids"]
     rating = args["rating"]
+    sort = (args["sort"] || "story_date") |> String.to_atom
+    sort_dir = (args["sort_dir"] || "asc") |> String.to_atom
 
     q = Story
 
@@ -78,7 +80,7 @@ defmodule Tex.Stories do
     q = if is_favorites do
       order_by(q, desc: :favorited_at)
     else
-      order_by(q, :id)
+      order_by(q, {^sort_dir, ^sort})
     end
 
     q

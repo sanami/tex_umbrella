@@ -11,11 +11,15 @@
 
 <.simple_form for={@filter_form} phx-change="filter" class="-mt-10">
   <div class="grid grid-cols-3 gap-4">
-    <.input field={@filter_form[:author_id]} label="Автор" type="select" options={if @author, do: [{@author.name, @author.id}], else: []} prompt="Любой"/>
-    <.input field={@filter_form[:cat_ids]} label="Категория" type="select" multiple options={Enum.map(@story_categories, & {&1.name, &1.id})}/>
     <div>
+      <.input field={@filter_form[:author_id]} label="Автор" type="select" options={if @author, do: [{@author.name, @author.id}], else: []} prompt="Любой"/>
       <.input field={@filter_form[:rating]} label="Рейтинг" type="select" options={1..9} prompt="Любой"/>
+    </div>
+    <.input field={@filter_form[:cat_ids]} label="Категория" type="select" multiple options={Enum.map(@story_categories, & {&1.name, &1.id})} style="height: 108px"/>
+    <div>
       <.input field={@filter_form[:page_size]} type="select" options={[10, 25, 50, 100]}/>
+      <.input field={@filter_form[:sort]} type="select" options={%{"Дата" => "story_date", "Рейтинг" => "rating", "Рейтинг кол-во" => "rating_count", "Название" => "title" }}/>
+      <.input field={@filter_form[:sort_dir]} type="select" options={%{"ASC" => "asc_nulls_last", "DESC" => "desc_nulls_last" }}/>
     </div>
   </div>
 </.simple_form>
