@@ -42,8 +42,8 @@ defmodule Tex.Stories do
     author_id = args["author_id"]
     cat_ids = args["cat_ids"]
     rating = args["rating"]
-    sort = (args["sort"] || "story_date") |> String.to_atom
-    sort_dir = (args["sort_dir"] || "asc") |> String.to_atom
+    sort = (args["sort"] || "story_date") |> String.to_existing_atom
+    sort_dir = (args["sort_dir"] || "asc") |> String.to_existing_atom
 
     q = Story
 
