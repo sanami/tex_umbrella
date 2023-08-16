@@ -6,7 +6,7 @@ defmodule Tex.Stories do
   alias Tex.Stories.{StoryCategory, StoryAuthor, Story}
 
   def count(module) do
-    module |> select([p], count(p.id)) |> Repo.one
+    Repo.aggregate(module, :count)
   end
 
   def list_story_categories do
@@ -87,7 +87,7 @@ defmodule Tex.Stories do
     q = if query && String.length(query) > 2 do
       query = String.split(query) |> Enum.join("%")
       query =  "%#{query}%"
-      from s in q, where: fragment("title ILIKE ?", ^query) # or fragment("story_body ILIKE ?", ^query)
+      from s in q, where: ilike(s.title, ^query) # or fragment("story_body ILIKE ?", ^query)
     else
       q
     end
