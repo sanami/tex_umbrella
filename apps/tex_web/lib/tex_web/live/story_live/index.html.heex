@@ -51,9 +51,9 @@
         <.story_details story={story} />
       </div>
       <div class="md:flex-grow cursor-pointer" phx-click={JS.patch(~p"/story/#{story.id}")}>
-        <h2 class="text-2xl font-medium text-gray-900 title-font mb-2">
+        <h2 class="text-2xl font-medium text-gray-900 title-font mb-2" phx-click="set_favorite" phx-value-id={story.id}>
           <%= story.title %>
-          <.icon name={if favorite?(story), do: "hero-star-solid", else: "hero-star"} phx-click="set_favorite" phx-value-id={story.id}/>
+          <.icon name={if favorite?(story), do: "hero-star-solid", else: "hero-star"}/>
         </h2>
         <p class="leading-relaxed">
           <%= story.story_excerpt %>

@@ -85,9 +85,8 @@ defmodule Tex.Stories do
     end
 
     q = if query && String.length(query) > 2 do
-      query = String.split(query) |> Enum.join("%")
-      query =  "%#{query}%"
-      from s in q, where: ilike(s.title, ^query) # or fragment("story_body ILIKE ?", ^query)
+      # PHRASETO_TSQUERY
+      from s in q, where: fragment("TO_TSVECTOR('russian', story_body) @@ PLAINTO_TSQUERY('russian', ?)", ^query)
     else
       q
     end

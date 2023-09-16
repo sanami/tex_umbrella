@@ -59,7 +59,8 @@ CREATE TABLE public.stories (
     rating_count integer,
     story_author_id bigint,
     inserted_at timestamp(0) without time zone NOT NULL,
-    updated_at timestamp(0) without time zone NOT NULL
+    updated_at timestamp(0) without time zone NOT NULL,
+    favorited_at timestamp(0) without time zone
 );
 
 
@@ -233,6 +234,13 @@ CREATE UNIQUE INDEX stories_categories_join_story_id_story_category_id_index ON 
 
 
 --
+-- Name: stories_favorited_at_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX stories_favorited_at_index ON public.stories USING btree (favorited_at);
+
+
+--
 -- Name: stories_rating_index; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -258,6 +266,13 @@ CREATE INDEX stories_story_date_index ON public.stories USING btree (story_date)
 --
 
 CREATE INDEX stories_title_index ON public.stories USING btree (title);
+
+
+--
+-- Name: stories_trgm_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX stories_trgm_idx ON public.stories USING gin (to_tsvector('russian'::regconfig, story_body));
 
 
 --
@@ -341,3 +356,5 @@ INSERT INTO public."schema_migrations" (version) VALUES (20230704163543);
 INSERT INTO public."schema_migrations" (version) VALUES (20230704195250);
 INSERT INTO public."schema_migrations" (version) VALUES (20230705154509);
 INSERT INTO public."schema_migrations" (version) VALUES (20230706153525);
+INSERT INTO public."schema_migrations" (version) VALUES (20230813121655);
+INSERT INTO public."schema_migrations" (version) VALUES (20230916144519);
